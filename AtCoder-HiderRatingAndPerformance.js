@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AtCoder-HiderRatingAndPerformance
 // @namespace    https://github.com/PenguinCabinet
-// @version      v0.0.1
+// @version      v0.0.2
 // @description  The tools to hide atcoder rating and performance
 // @author       PenguinCabinet
 // @license      MIT
@@ -11,49 +11,57 @@
 // ==/UserScript==
 
 //config
-const config_hide_ranking=false;
+const config_hide_ranking = false;
 //config
 
-(function() {
+(function () {
     'use strict';
 
-    if(window.location.href.match(/contests/)){
-        if(config_hide_ranking){
-            let lis=document.querySelectorAll('li');
-            lis.forEach(function(elem){         
-                console.log(elem.textContent)       
-                if(
+    if (window.location.href.match(/contests/)) {
+        if (config_hide_ranking) {
+            let lis = document.querySelectorAll('li');
+            lis.forEach(function (elem) {
+                console.log(elem.textContent)
+                if (
                     elem.textContent.match(/順位表/)
-                ){
+                ) {
                     elem.style.display = 'none';
                 }
             });
         }
     }
-    else if(window.location.href.match(/history/)){
-        let tables=document.querySelectorAll('table');
-        tables.forEach(function(elem){
-            let len=elem.rows.length;
+    else if (window.location.href.match(/history/)) {
+        let tables = document.querySelectorAll('table');
+        tables.forEach(function (elem) {
+            let len = elem.rows.length;
 
-            for (let i=0;i<len;i++) {
-                for(let j=0;j<(config_hide_ranking?5:4);j++){
+            for (let i = 0; i < len; i++) {
+                for (let j = 0; j < (config_hide_ranking ? 5 : 4); j++) {
                     elem.rows[i].deleteCell(-1);
                 }
             }
         })
-    }else{
-        let ths=document.querySelectorAll('th');
-        ths.forEach(function(elem){
-            if(
-                elem.textContent=="Rating"
-                ||elem.textContent=="Rating最高値"
-            ){
-                elem.nextElementSibling.firstElementChild.textContent="XXXX";
+    } else {
+        let ths = document.querySelectorAll('th');
+        ths.forEach(function (elem) {
+            if (
+                elem.textContent.indexOf('Rating') != -1
+            ) {
+                const rateting_text_class_name =
+                    elem.nextElementSibling.getElementsByTagName("span")[0]
+                        .className;
+
+                let hide_rating_text_elem = document.createElement('span');
+                hide_rating_text_elem.className = rateting_text_class_name;
+                hide_rating_text_elem.innerHTML = "XXXX";
+
+                elem.nextElementSibling.innerHTML = "";
+                elem.nextElementSibling.appendChild(hide_rating_text_elem);
             }
         });
 
-        let canvases=document.querySelectorAll('canvas');
-        canvases.forEach(function(elem){
+        let canvases = document.querySelectorAll('canvas');
+        canvases.forEach(function (elem) {
             elem.parentNode.style.display = 'none';
         });
     }
