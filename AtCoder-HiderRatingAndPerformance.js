@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         AtCoder-HiderRatingAndPerformance
 // @namespace    https://github.com/PenguinCabinet
-// @version      v0.0.2
-// @description  The tools to hide atcoder rating and performance
+// @version      v0.0.3
+// @description  The tool to hide atcoder rating and performance
 // @author       PenguinCabinet
 // @license      MIT
 // @match        https://atcoder.jp/users/*
@@ -21,7 +21,6 @@ const config_hide_ranking = false;
         if (config_hide_ranking) {
             let lis = document.querySelectorAll('li');
             lis.forEach(function (elem) {
-                console.log(elem.textContent)
                 if (
                     elem.textContent.match(/順位表/)
                 ) {
@@ -44,6 +43,14 @@ const config_hide_ranking = false;
     } else {
         let ths = document.querySelectorAll('th');
         ths.forEach(function (elem) {
+            if (
+                elem.textContent.indexOf('順位') != -1 ||
+                elem.textContent.indexOf('Rank') != -1
+            ) {
+                if (config_hide_ranking) {
+                    elem.nextElementSibling.innerHTML = "XXXX";
+                }
+            }
             if (
                 elem.textContent.indexOf('Rating') != -1
             ) {
